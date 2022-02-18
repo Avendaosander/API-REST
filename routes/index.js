@@ -22,9 +22,7 @@ function generarFecha() {
 router.post('/new-article', validarCampos, (req, res)=>{
   const { titulo, subtitulo, autor, cuerpo, enlaces } = req.body
   const fecha = generarFecha()
-  const nuevoArticulo = {
-    titulo, subtitulo, fecha, autor, cuerpo, enlaces
-  }
+  const nuevoArticulo = { titulo, subtitulo, fecha, autor, cuerpo, enlaces }
   console.log(nuevoArticulo)
   res.status(200).send("Articulo Creado Correctamente")
 })

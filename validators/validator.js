@@ -1,28 +1,21 @@
-const { check } = require('express-validator')
+const { body } = require('express-validator')
+const { validationResult } = require('express-validator')
 const { validationCreate } = require('../helpers/ValidatorHelper')
 
 const validarCampos = [
-   check('titulo', "Ingrese un Titulo para el articulo")
+   body('titulo', "Ingrese un Titulo para el articulo")
       .exists()
-      .not()
-      .isEmpty()
       .isLength({min: 5}),
-   check('subtitulo', "Ingrese un Subtitulo para el articulo")
+   body('subtitulo', "Ingrese un Subtitulo para el articulo")
       .exists()
-      .not()
-      .isEmpty()
       .isLength({min: 5}),
-   check('autor', "Ingrese el Autor del articulo")
+   body('autor', "Ingrese el Autor del articulo")
       .exists()
-      .not()
-      .isEmpty()
       .isLength({min: 3}),
-   check('cuerpo', "Ingrese el contenido del articulo")
+   body('cuerpo', "Ingrese el contenido del articulo")
       .exists()
-      .not()
-      .isEmpty()
       .isLength({min: 10}),
-   check('enlaces', "Ingrese los Enlaces Bibliograficos del articulo")
+   body('enlaces', "Ingrese los Enlaces Bibliograficos del articulo")
       .isURL(),
    (req,res,next) => {
       validationCreate(req, res, next)
