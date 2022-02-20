@@ -30,7 +30,7 @@ router.get('/articulos', (req,res)=>{
   }else{
     Listado.mostrarList(res);
   }
-})
+});
 
 //GET para mostrar por nombre
 router.get('/articulo/:titulo', (req,res)=>{
@@ -39,7 +39,7 @@ router.get('/articulo/:titulo', (req,res)=>{
   }else{
     Listado.buscarArt(req.params.titulo,res)
   }
-})
+});
 
 router.post('/new-article', validarCampos, (req, res)=>{
   nuevoArticulo = new articulo(req, res)
@@ -63,6 +63,15 @@ router.put('/modificarArt/:titulo', (req,res)=>{
     res.status(400).send('No hay articulos disponibles')
   }else{
     Listado.editarArt(req.params.titulo, req.body, res);
+  }
+})
+
+//PUT Modificar solo una propiedad
+router.put('/modificar/:propiedad/:titulo', (req,res)=>{
+  if(Listado===undefined){
+    res.status(400).send('No hay articulos disponibles')
+  }else{
+    Listado.editarPropiedad(req.params.titulo, req.params.propiedad,req,res);
   }
 })
 
