@@ -8,6 +8,10 @@ class articulo{
       if (typeof req.body.enlaces !== 'undefined') {
          this.enlaces = req.body.enlaces;
       }
+      this.vistas=0;
+      if (typeof req.body.enlaces !== 'undefined') {
+         this.enlaces = req.body.enlaces;
+      }
    }
 
    generarFecha() { 
