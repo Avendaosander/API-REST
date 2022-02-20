@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs')
-const { validarCampos, validarCamposVideo } = require('../validators/validator')
+const { validarAdmin, validarCampos, validarCamposVideo } = require('../validators/validator')
 const articulo = require('../controllers/articulo')
 const listado = require('../controllers/lista');
 // const archJson = require('../articulos.json')
@@ -30,6 +30,18 @@ router.get('/articulos', (req,res)=>{
   }else{
     Listado.mostrarList(res);
   }
+})
+
+router.post('/register', validarAdmin, (req, res) => {
+  req.session.admin = req.body
+  res.status(200).redirect('/perfil')
+})
+
+router.get('/perfil', (req, res) => {
+  const admin = req.session.admin 
+  delete req.session.admin
+  console.log(admin)
+  res.status(200).send("Administrador En Linea")
 })
 
 //GET para mostrar por nombre
@@ -64,6 +76,10 @@ router.put('/modificarArt/:titulo', (req,res)=>{
   }else{
     Listado.editarArt(req.params.titulo, req.body, res);
   }
+})
+
+router.delete('articulo/delete/:titulo', (req, res) => {
+  res.status(200).send('Articulo eliminado correctamente')
 })
 
 module.exports = router;

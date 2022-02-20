@@ -77,4 +77,13 @@ const validarCamposVideo = [
    }
 ]
 
-module.exports = { validarCampos, validarCamposVideo }
+const validarAdmin = [
+   body('email', 'Ingrese un Email valido')
+      .exists()
+      .isEmail(),
+   body('password', 'Ingrese una Contraseña valida')
+      .exists()
+      .isStrongPassword()
+]
+
+module.exports = { validarAdmin, validarCampos, validarCamposVideo }
