@@ -15,8 +15,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
    secret: 'mysecretkey',
-   resave: false,
-   saveUninitialized: false
+   resave: true,
+   saveUninitialized: true
 }))
 
 app.use('/', indexRouter);
