@@ -81,7 +81,7 @@ router.post('/new-article/:rol', validarCampos, (req, res)=>{
 
 router.post('/new-article-video/:rol', validarCamposVideo, (req, res)=>{
   if(req.params.rol === "Admin") {
-    nuevoArticulo = new articulo(req, res)
+    nuevoArticulo = new articuloVideo(req, res)
     Listado.agregarArt(nuevoArticulo);
     articulos.push(nuevoArticulo)
     let jsonArticulos = JSON.stringify(articulos)

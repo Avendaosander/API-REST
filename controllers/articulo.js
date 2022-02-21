@@ -47,4 +47,11 @@ class articulo{
 
 }
 
+class ArticuloVideo extends articulo{
+   constructor(req,res){
+      super(req,res);
+   }
+}
+
 module.exports = articulo;
+module.exports = ArticuloVideo;
