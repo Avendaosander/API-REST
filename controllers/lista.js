@@ -37,7 +37,7 @@ class listado{
          
          this.articulos[this.articulos.indexOf(artEncontrado)].vistas++;
          res.status(200).json(artEncontrado);
-//promesa
+         
          function buscarArt(data,res) {
             articulos.find(data,res)
                .then(function(artEncontrado) {
@@ -46,7 +46,7 @@ class listado{
                .catch(function(err){
                   res.send(err);
                })
-           }
+         }
       }
    }
 

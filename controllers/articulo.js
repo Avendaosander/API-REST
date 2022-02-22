@@ -8,10 +8,10 @@ class articulo{
       if (typeof req.body.enlaces !== 'undefined') {
          this.enlaces = req.body.enlaces;
       }
-      this.vistas=0;
       if (typeof req.body.enlaces !== 'undefined') {
          this.enlaces = req.body.enlaces;
       }
+      this.vistas = 0;
    }
 
    generarFecha() { 
@@ -44,14 +44,6 @@ class articulo{
    set Enlaces(value){
       this.enlaces = value
    }
-
 }
 
-class ArticuloVideo extends articulo{
-   constructor(req,res){
-      super(req,res);
-   }
-}
-
-module.exports = articulo;
-module.exports = ArticuloVideo;
+module.exports = { articulo };

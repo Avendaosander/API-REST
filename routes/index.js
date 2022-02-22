@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs')
 const { validarAdmin, validarCampos, validarCamposVideo, validarUpdate } = require('../validators/validator')
-const articulo = require('../controllers/articulo')
+const { articulo } = require('../controllers/articulo')
 const listado = require('../controllers/lista');
 
 const jsonArticulos = fs.readFileSync('articulos.json', 'utf-8')
@@ -20,7 +20,6 @@ let Listado = new listado();
 articulos.forEach(element => {
   Listado.agregarArt(element)
 })
-// console.log(Listado.articulos)
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -29,11 +28,13 @@ router.get('/', function(req, res) {
 
 // GET para mostrar articulos
 router.get('/articulos', (req,res)=>{
-  if(typeof Listado === 'undefined'){
-    res.status(400).send('No hay articulos para mostrar');
-  }else{
-    Listado.mostrarList(res);
-  }
+  return new Promise((resolve, reject) => {
+    if(typeof Listado.articulos[0] === 'undefined'){
+      reject( res.status(400).send('No hay articulos para mostrar') )
+    }else{
+      resolve( Listado.mostrarList(res) )
+    }
+  });
 })
 
 router.post('/register', validarAdmin, (req, res) => {
@@ -55,15 +56,18 @@ router.get('/perfil/:rol', (req, res) => {
 
 //GET para mostrar por nombre
 router.get('/articulo/:titulo/:rol', (req,res)=>{
-  if(req.params.rol === "Admin") {
-    if(typeof Listado === 'undefined'){
-      res.send('No hay articulos')
-    }else{
-      Listado.buscarArt(req.params.titulo,res)
+  return new Promise((resolve, reject) => {
+    if(req.params.rol === "Admin") {
+      if(typeof Listado.articulos[0] === 'undefined'){
+        res.send('No hay articulos')
+      }else{
+        Listado.buscarArt(req.params.titulo,res)
+        resolve( guardaJSON() )
+      }
+    } else {
+      reject(res.status(400).send('Usted es un Usuario, solo puede ver la lista de los articulos disponibles'))
     }
-  } else {
-    res.status(400).send('Usted es un Usuario, solo puede ver la lista de los articulos disponibles')
-  }
+  });
 })
 
 router.post('/new-article/:rol', validarCampos, (req, res)=>{
@@ -81,7 +85,7 @@ router.post('/new-article/:rol', validarCampos, (req, res)=>{
 
 router.post('/new-article-video/:rol', validarCamposVideo, (req, res)=>{
   if(req.params.rol === "Admin") {
-    nuevoArticulo = new articuloVideo(req, res)
+    nuevoArticulo = new articulo(req, res)
     Listado.agregarArt(nuevoArticulo);
     articulos.push(nuevoArticulo)
     let jsonArticulos = JSON.stringify(articulos)
@@ -94,7 +98,7 @@ router.post('/new-article-video/:rol', validarCamposVideo, (req, res)=>{
 
 router.put('/modificarArt/:titulo/:rol', validarUpdate, (req,res)=>{
   if(req.params.rol === "Admin") {
-    if(typeof Listado === 'undefined'){
+    if(typeof Listado.articulos[0] === 'undefined'){
       res.status(400).send('No hay articulos disponibles')
     }else{
       Listado.editarArt(req.params.titulo, req.body, res);
@@ -109,7 +113,7 @@ router.put('/modificarArt/:titulo/:rol', validarUpdate, (req,res)=>{
 //PUT Modificar solo una propiedad
 router.put('/modificar/:propiedad/:titulo/:rol', validarUpdate, (req,res)=>{
   if(req.params.rol === "Admin") {
-    if(typeof Listado === 'undefined'){
+    if(typeof Listado.articulos[0] === 'undefined'){
       res.status(400).send('No hay articulos disponibles')
     }else{
       Listado.editarPropiedad(req.params.titulo, req.params.propiedad,req,res);
@@ -123,7 +127,7 @@ router.put('/modificar/:propiedad/:titulo/:rol', validarUpdate, (req,res)=>{
 
 router.delete('/delete/:titulo/:rol', (req, res) => {
   if (req.params.rol === "Admin") {
-    if(typeof Listado === 'undefined'){
+    if(typeof Listado.articulos[0] === 'undefined'){
       res.send('No hay articulos')
     }else{
       Listado.deleteArt(req.params.titulo, res)
